@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Servitude::VERSION
   spec.authors       = ["Jason Harrelson"]
   spec.email         = ["jason@lookforwardenterprises.com"]
-  spec.summary       = %q{A set of utilities to aid in building Ruby servers.}
-  spec.description   = %q{A set of utilities to aid in building Ruby servers.  See README for more details.}
+  spec.summary       = %q{A set of utilities to aid in building multithreaded Ruby servers utilizing Celluloid.}
+  spec.description   = %q{A set of utilities to aid in building multithreaded Ruby servers utilizing Celluloid.  See README for more details.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -21,6 +21,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake"
 
+  spec.add_dependency "celluloid", "~> 0"
+  spec.add_dependency "hooks", "~> 0"
+  spec.add_dependency "oj", "~> 2"
+  spec.add_dependency "rainbow", "~> 2"
   spec.add_dependency "trollop", "~> 2"
   spec.add_dependency "yell", "~> 1"
 end

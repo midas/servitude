@@ -37,6 +37,10 @@ module Servitude
       end
 
       def from_file( file_path )
+        unless File.exists?( file_path )
+          raise "Configuration file #{file_path} does not exist"
+        end
+
         options = Oj.load( File.read( file_path ))
         Servitude::NS::configuration = Servitude::NS::Configuration.new
 
@@ -45,6 +49,8 @@ module Servitude
             Servitude::NS::configuration.send( :"#{c}=", options[c] )
           end
         end
+
+        options[:config_loaded] = true
       end
 
     end

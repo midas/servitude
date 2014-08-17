@@ -151,9 +151,11 @@ You can provide one or more method names or procs to the callbacks to be execute
         after_initialize :configure_server
 
         finalize :cleanup
+
         finalize do
           info "Shutting down ..."
         end
+
       protected
 
         def configure_server
@@ -161,7 +163,7 @@ You can provide one or more method names or procs to the callbacks to be execute
         end
 
         def cleanup
-          # configuration code here ...
+          # cleanup code here ...
         end
       end
     end

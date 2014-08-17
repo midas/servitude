@@ -105,6 +105,21 @@ attributes to it.  The Configuration module also provides a ::from_file method t
       end
     end
 
+If you want to load your configuration from a JSON config file you may do so by registering a callback (most likely an after_initialize callback).  If the
+configuration file does not exist an error will be raised by Servitude.
+
+    module AwesomeServer
+      class Server
+        include Servitude::Server
+        
+        after_initialize do
+          Configuration.from_file( options[:config] )
+        end
+
+        # ...
+      end
+    end
+
 ### Servitude::Server
 
 The Server module provides the base functionality for implementing a server, such as configuring the loggers, setting up Unix signal handling, outputting a 

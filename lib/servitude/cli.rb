@@ -47,6 +47,8 @@ options:
       #
       @cmd = ARGV.shift || ''
       @options = case( cmd )
+        when ''
+          Trollop::die 'No command provided'
         when "restart"
           Trollop::options do
             opt :config, "The path for the config file", :type => String, :short => '-c', :default => Servitude::NS::DEFAULT_CONFIG_PATH

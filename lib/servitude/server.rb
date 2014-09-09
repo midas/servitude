@@ -1,3 +1,4 @@
+require 'servitude'
 require 'hooks'
 
 module Servitude

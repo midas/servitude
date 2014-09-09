@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'servitude'
 require 'trollop'
 require 'yell'
 

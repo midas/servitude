@@ -27,6 +27,7 @@ module Servitude
     end
 
     def start_banner( options )
+      configuration_attributes = Servitude::NS::Configuration.attributes rescue nil
       [
         "",
         "***",
@@ -36,7 +37,7 @@ module Servitude
         "*",
         "* Configuration:",
         (options[:config_loaded] ? "*   file: #{options[:config]}" : nil),
-        Servitude::NS::Configuration.attributes.map { |a| "*   #{a}: #{config_value( a )}" },
+        Array( configuration_attributes ).map { |a| "*   #{a}: #{config_value a}" },
         "*",
         "***",
       ].flatten.reject( &:nil? )

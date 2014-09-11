@@ -47,7 +47,6 @@ module EchoServer
     end
 
     finalize do
-      binding.pry
       info 'Shutting down ...'
     end
 

@@ -20,6 +20,8 @@ Or install it yourself as:
 
 ## Usage
 
+For executable examples see the examples folder.
+
 To build a server with Servitude only a couple of steps are required.
 
 * Include the Servitude::Base module in the base module of your server project.

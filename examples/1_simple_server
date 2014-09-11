@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'servitude'
+
+# The simple server is as actually not a true server at all as it does nothing except for start and run (serving no
+# requests).  
+#
+# Use CTRL-c (INT signal) to stop the server. Additionally send the process an INT or TERM signal using the kill comand 
+# or your # OS's # process monitoring application.  All 3 strategies result in a graceful shutdown as displayed by the 
+# 'Shutting down ...' which occurs due to the finalize block.
+#
+# Usage:
+#   bundle exec examples/1_simple_server
+#
+module SimpleServer
+
+  include Servitude::Base
+
+  APP_FOLDER = 'simple-server'
+  VERSION    = '1.0.0'
+
+  boot host_namespace: SimpleServer,
+       app_id: 'simple-server',
+       app_name: 'Simple Server',
+       company: 'LFE',
+       default_config_path: "/usr/local/etc/#{APP_FOLDER}/#{APP_FOLDER}.conf",
+       default_log_path: "/usr/local/var/log/#{APP_FOLDER}/#{APP_FOLDER}.log",
+       default_pid_path: "/usr/local/var/run/#{APP_FOLDER}/#{APP_FOLDER}.pid",
+       default_thread_count: 1,
+       version_copyright: "v#{VERSION} \u00A9#{Time.now.year} LFE"
+
+  class Server
+
+    include Servitude::Server
+
+    finalize do
+      info 'Shutting down ...'
+    end
+
+    def run
+      info "Running ..."
+    end
+
+  end
+end
+
+SimpleServer::Server.new.start

@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-For executable examples see the examples folder.
+For executable examples see the [examples folder](https://github.com/midas/servitude/tree/master/examples).
 
 To build a server with Servitude only a couple of steps are required.
 

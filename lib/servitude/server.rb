@@ -35,9 +35,8 @@ module Servitude
       log_startup
       run
 
-      trap INT do
-        Thread.new { finalize; exit }.join
-      end
+      trap( INT )  { stop }
+      trap( TERM ) { stop }
 
       run_hook :before_sleep
       sleep
@@ -53,6 +52,10 @@ module Servitude
 
     def finalize
       run_hook :finalize
+    end
+
+    def stop
+      Thread.new { finalize; exit }.join
     end
 
   end

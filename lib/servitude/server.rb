@@ -19,7 +19,7 @@ module Servitude
       end
     end
 
-    def initialize( options )
+    def initialize( options={} )
       unless Servitude.boot_called
         raise 'You must call boot before starting server'
       end

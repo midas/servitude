@@ -20,13 +20,15 @@ module SimpleServer
   APP_FOLDER = 'simple-server'
   VERSION    = '1.0.0'
 
+  PROJECT_ROOT = File.expand_path( '../..', __FILE__ )
+  
   boot host_namespace: SimpleServer,
        app_id: 'simple-server',
        app_name: 'Simple Server',
        company: 'LFE',
-       default_config_path: "/usr/local/etc/#{APP_FOLDER}/#{APP_FOLDER}.conf",
-       default_log_path: "/usr/local/var/log/#{APP_FOLDER}/#{APP_FOLDER}.log",
-       default_pid_path: "/usr/local/var/run/#{APP_FOLDER}/#{APP_FOLDER}.pid",
+       default_config_path: "#{PROJECT_ROOT}}/config/#{APP_FOLDER}.conf",
+       default_log_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.log",
+       default_pid_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.pid",
        default_thread_count: 1,
        version_copyright: "v#{VERSION} \u00A9#{Time.now.year} LFE"
 

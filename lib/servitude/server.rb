@@ -6,12 +6,14 @@ module Servitude
 
     def self.included( base )
       base.class_eval do
+        include ConfigHelper
         include Logging
         include ServerLogging
         include Hooks
 
         define_hook :after_initialize,
                     :before_initialize,
+                    :before_run,
                     :before_sleep,
                     :finalize
 
@@ -38,6 +40,7 @@ module Servitude
       trap( INT )  { stop }
       trap( TERM ) { stop }
 
+      run_hook :before_run
       run
       run_hook :before_sleep
       sleep

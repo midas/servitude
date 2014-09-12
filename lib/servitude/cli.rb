@@ -52,6 +52,7 @@ options:
         when "restart"
           Trollop::options do
             opt :config, "The path for the config file", :type => String, :short => '-c', :default => Servitude::NS::DEFAULT_CONFIG_PATH
+            opt :environment, "The log level", :type => String, :short => '-e'
             opt :log_level, "The log level", :type => String, :default => 'info', :short => '-o'
             opt :log, "The path for the log file", :type => String, :short => '-l', :default => Servitude::NS::DEFAULT_LOG_PATH
             opt :pid, "The path for the PID file", :type => String, :default => Servitude::NS::DEFAULT_PID_PATH
@@ -60,6 +61,7 @@ options:
         when "start"
           Trollop::options do
             opt :config, "The path for the config file", :type => String, :short => '-c', :default => Servitude::NS::DEFAULT_CONFIG_PATH
+            opt :environment, "The log level", :type => String, :short => '-e'
             opt :interactive, "Execute the server in interactive mode", :short => '-i'
             opt :log_level, "The log level", :type => String, :default => 'info', :short => '-o'
             opt :log, "The path for the log file", :type => String, :short => '-l', :default => Servitude::NS::DEFAULT_LOG_PATH

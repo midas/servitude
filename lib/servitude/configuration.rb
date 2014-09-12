@@ -6,6 +6,8 @@ module Servitude
   class Configuration < SimpleDelegator
 
     def initialize( options={} )
+      options.reject! { |k,v| v.nil? }
+
       if options[:use_config]
         @_config = Hashie::Mash.new( file_options( options[:config] ))
         _config.merge!( options )

@@ -192,7 +192,7 @@ the smart banner would look like:
     ***
 
 You may notice the absence of the interactive value.  This is due to filtering built into the start banner output.  Several values are already in the 
-default_config_filters that are a result of the Trollop implementation of the command line option parsing.  If you woul dlike to add additional keys 
+default_config_filters that are a result of the Trollop implementation of the command line option parsing.  If you would like to add additional keys 
 to be filterd, override the config_filters method in your server class and provide an array of keys (in dot notation) to filter.
 
     module AwesomeServer
@@ -207,6 +207,35 @@ to be filterd, override the config_filters method in your server class and provi
         ...
       end
     end
+
+### Servitude::EnvironmentConfiguration
+
+Building upon Servitude::Configuration, the EnvironmentConfiguration adds the concept of environments to configuration.  In order to use 
+EnvironmentConfiguration override #configuration_class in your server class.
+
+    module AwesomeServer
+      class Server
+        include Servitude::Server
+
+        def configuration_class
+          Servitude::EnvironmentConfiguration
+        end
+      end
+    end
+
+The command line can except and --environment (-e) switch, although it is not required.  If using config file and environemnt, a best practice is to put
+the default environment in your config file so there is a default environment.
+
+    {
+      "environment": "development",
+      "development": {
+        ...
+      },
+      "production": {
+        ...
+      }
+    }
+
 
 ### Servitude::Server
 
@@ -229,6 +258,7 @@ The Server module provides callbacks to utilize in your server implementation:
 
 * __before_initialize__: executes just before the initilaization of the server
 * __after_initialize__: executes immediately after initilaization of the server
+* __before_run: executes just before the run method is called
 * __before_sleep__: executes just before the main thread sleeps to avoid exiting
 * __finalize__: executes before server exits
 

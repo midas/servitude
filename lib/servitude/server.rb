@@ -33,11 +33,11 @@ module Servitude
 
     def start
       log_startup
-      run
 
       trap( INT )  { stop }
       trap( TERM ) { stop }
 
+      run
       run_hook :before_sleep
       sleep
     end

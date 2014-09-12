@@ -60,10 +60,6 @@ module EchoServer
         info "Closing connection"
         client.close
       end
-    rescue Interrupt
-      # Work-around: TcpServer#accept appears to trap the first interrupt and 
-      # raise Interrupt, thus our trap does not happen.
-      stop
     end
 
   private

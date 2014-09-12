@@ -95,30 +95,116 @@ In your CLI file (bin/awesome-server):
 
 ### Servitude::Configuration
 
-The Configuration module provides functionality for creating a configuration class.  You must call the ::configurations method and provide configuration
-attributes to it.  The Configuration module also provides a ::from_file method that allows a configuration to be read from a JSON config file.
+All Servitude servers automatically have a configuration instantiated for them (although it may be empty).  The default class for the configuration is
+Servitude::Configuration.  In order to define a custom configuration, define a custom configuraiton class (which may inherit from Servitude::Configuration)
+and simply override the Servitude::Server#configuration method in your Server class.  Be sure the custom configuration calss accepts the command line
+options and passes them to the super class's initializer or configuration will be completely broken.
 
     module AwesomeServer
-      class Configuration
-        include Servitude::Configuration
+      class Configuration < Servitude::Configuration
+        def initialize( cli_options )
+          super( cli_options )
+          # possibly do something else ...
+        end
+      end
 
-        configurations :some_config,            # attribute with no default
-                       [:another, 'some value'] # attribute with a default
+      class Server
+        include Servitude::Server
+
+        def configuration_class
+          AwesomeServer::Configuration
+        end
       end
     end
 
-If you want to load your configuration from a JSON config file you may do so by registering a callback (most likely an after_initialize callback).  If the
-configuration file does not exist an error will be raised by Servitude.
+The Servitude::Configuration class delegates to a [Hashie::Mash](https://github.com/intridea/hashie#mash) backend, which gives it great flexibiltiy.
+Any Hash or JSON like structure can be passed directly into the configuration and work.  Thus, one does not have to explicitly define the configuration 
+attributes as the configuration will represent exactly what is in the JSON config file.  In addition, the command line options are passed into the 
+configuration and merged to the configuration that came from a config file (if there is a config file).  The merge results in the command line options 
+overriding any matching file configurations.
+
+For example, given a config file:
+
+    {
+      "key1": "value1",
+      "log_level": "info",
+      "envs": {
+        "development": {
+          "key2": "value2",
+        },
+        "production": {
+          "key2": "value3",
+        }
+      }
+    }
+
+And command line options of:
+
+    $ awesome-server start --interactive --log_level debug
+
+The configuration result will be:
+
+    {
+      "key1": "value1",
+      "log_level": "debug",
+      "interactive": true,
+      "envs": {
+        "development": {
+          "key2": "value2",
+        },
+        "production": {
+          "key2": "value3",
+        }
+      }
+    }
+
+Notice the log_level has been overridden to the command line option value instead of the file value.  Because the command line options are an inherently
+flass structure, any config file options that should be overridden should be at the first level of the JSON structure.
+
+Because Hashie::Mash is the backend for the configuration values may be accessed using a hash notation or an object notation.
+
+    config['key1'] # => "value1"
+    config[:key1]  # => "value1"
+    config.key1    # => "value1"
+
+    config['development']['key2'] # => "value2"
+    config[:development][:key2]   # => "value2"
+    config.development.key2       # => "value2"
+
+The startup banner for a Servitude server automatically outputs the ocnfiguration options in a dot notation format.  Continuing our configuraiton example,
+the smart banner would look like:
+
+    ***
+    * Awesome Server started
+    *
+    * v1.0.0 ©2014 Awesome Company
+    *
+    * Configuration
+    *  config: /Users/cjharrelson/development/personal/gems/servitude/config/echo-server.conf
+    *  log_level: debug
+    *  log: STDOUT
+    *  pid: /Users/cjharrelson/development/personal/gems/servitude/tmp/echo-server.pid
+    *  threads: 1
+    *  key1: value1
+    *  envs.development.key2: value2
+    *  envs.production.key2: value3
+    *
+    ***
+
+You may notice the absence of the interactive value.  This is due to filtering built into the start banner output.  Several values are already in the 
+default_config_filters that are a result of the Trollop implementation of the command line option parsing.  If you woul dlike to add additional keys 
+to be filterd, override the config_filters method in your server class and provide an array of keys (in dot notation) to filter.
 
     module AwesomeServer
       class Server
-        include Servitude::Server
-        
-        after_initialize do
-          Configuration.from_file( options[:config] )
+        ...
+        def config_filters
+          %w(
+            key1
+            envs.development.key2
+          )
         end
-
-        # ...
+        ...
       end
     end
 

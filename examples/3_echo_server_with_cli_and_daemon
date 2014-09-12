@@ -3,17 +3,30 @@
 require 'rubygems'
 require 'servitude'
 require 'socket'
+require 'trollop'
 require 'pry'
 
-# The echo server accepts a message and repeats it back.  It is the first real server in the examples.
+# The echo server accepts with CLI builds on the 2_echo_server example, addiing a command line interface.
 #
 # Note: Due to TcpServer#accept's implementation, the server is not currently gracefully shutting down as the trap of INT
 # appears to never happen.
 #
-# Usage:
-#   bundle exec examples/2_echo_server
+# The CLI has 4 sub-commands: start, stop, status and restart.
 #
-#   Then use telent to exercise the server:
+# Using the -i of --interactive switch on the start command will run the server attached in the terminal you execute the command
+# in.  Without the interactive switch, the server will run as a daemon.  The start, stop, and status commands are used to control
+# the daemonized process.  If run in daemon mode, you can tail the log:
+#
+# $ tail -f tmp/echo-server.log
+#
+# Usage:
+#   Help:
+#     bundle exec examples/3_echo_server_with_cli_and_daemon -h
+#
+#   Start (interactive):
+#     bundle exec examples/3_echo_server_with_cli_and_daemon start -i
+#
+#   Then use telnet to exercise the server:
 #   $ telnet localhost 1234
 #   Hello World!
 #   You said: Hello World!
@@ -29,15 +42,21 @@ module EchoServer
   PROJECT_ROOT = File.expand_path( '../..', __FILE__ )
   
   boot host_namespace: EchoServer,
-       app_id: 'echo-server',
-       app_name: 'Echo Server',
+       app_id: 'echo-server-with-cli',
+       app_name: 'Echo Server With CLI',
        company: 'LFE',
        use_config: false,
-       default_config_path: nil,
-       default_log_path: nil,
-       default_pid_path: nil,
+       default_config_path: "#{PROJECT_ROOT}}/config/#{APP_FOLDER}.conf",
+       default_log_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.log",
+       default_pid_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.pid",
        default_thread_count: nil,
        version_copyright: "v#{VERSION} \u00A9#{Time.now.year} LFE"
+
+  class Cli
+
+    include Servitude::Cli
+
+  end
 
   class Server
 
@@ -63,6 +82,12 @@ module EchoServer
       end
     end
 
+  protected
+
+    def config_filters
+      %w(threads)
+    end
+
   private
 
     attr_reader :tcp_server
@@ -70,4 +95,4 @@ module EchoServer
   end
 end
 
-EchoServer::Server.new.start
+EchoServer::Cli.new( ARGV ).run

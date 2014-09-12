@@ -106,17 +106,17 @@ options:
     end
 
     def start_interactive
-      server = Servitude::NS::Server.new( options.merge( log: nil ))
+      server = Servitude::NS::Server.new( options.merge( use_config: Servitude::NS::USE_CONFIG, log: 'STDOUT' ))
       server.start
     end
 
     def start_daemon
-      server = Servitude::Daemon.new( options )
+      server = Servitude::Daemon.new( options.merge( use_config: Servitude::NS::USE_CONFIG ))
       server.start
     end
 
     def stop
-      server = Servitude::Daemon.new( options )
+      server = Servitude::Daemon.new( options.merge( use_config: Servitude::NS::USE_CONFIG ))
       server.stop
     end
 
@@ -126,7 +126,7 @@ options:
     end
 
     def status
-      Servitude::Daemon.new( options ).status
+      Servitude::Daemon.new( options.merge( use_config: Servitude::NS::USE_CONFIG )).status
     end
 
   end

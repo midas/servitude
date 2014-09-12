@@ -9,6 +9,7 @@ module Servitude
   autoload :Configuration,    'servitude/configuration'
   autoload :Daemon,           'servitude/daemon'
   autoload :Logging,          'servitude/logging'
+  autoload :PrettyPrint,      'servitude/pretty_print'
   autoload :ServerLogging,    'servitude/server_logging'
   autoload :Server,           'servitude/server'
   autoload :ServerThreaded,   'servitude/server_threaded'

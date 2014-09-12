@@ -26,10 +26,11 @@ module SimpleServer
        app_id: 'simple-server',
        app_name: 'Simple Server',
        company: 'LFE',
-       default_config_path: "#{PROJECT_ROOT}}/config/#{APP_FOLDER}.conf",
-       default_log_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.log",
-       default_pid_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.pid",
-       default_thread_count: 1,
+       use_config: false,
+       default_config_path: nil,
+       default_log_path: nil,
+       default_pid_path: nil,
+       default_thread_count: nil,
        version_copyright: "v#{VERSION} \u00A9#{Time.now.year} LFE"
 
   class Server

@@ -21,8 +21,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "pry-debugger"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
 
   spec.add_dependency "celluloid", "~> 0"
+  spec.add_dependency "hashie"
   spec.add_dependency "hooks", "~> 0"
   spec.add_dependency "oj", "~> 2"
   spec.add_dependency "rainbow", "~> 2"

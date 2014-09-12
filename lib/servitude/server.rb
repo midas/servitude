@@ -15,18 +15,19 @@ module Servitude
                     :before_sleep,
                     :finalize
 
-        attr_reader :options
+        attr_reader :cli_options
       end
     end
 
-    def initialize( options={} )
+    def initialize( cli_options={} )
       unless Servitude.boot_called
         raise 'You must call boot before starting server'
       end
 
-      @options = options
+      @cli_options = cli_options
 
       run_hook :before_initialize
+      initialize_config
       initialize_loggers
       run_hook :after_initialize
     end
@@ -46,6 +47,14 @@ module Servitude
 
     def run
       raise NotImplementedError
+    end
+
+    def initialize_config
+      Servitude::NS::configuration = configuration_class.new( cli_options )
+    end
+
+    def configuration_class
+      Servitude::Configuration
     end
 
   private

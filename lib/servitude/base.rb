@@ -14,15 +14,16 @@ module Servitude
 
     module ClassMethods
 
-      def boot( host_namespace:,
-                app_id:,
-                app_name:,
-                company:,
-                default_config_path:,
-                default_log_path:,
-                default_pid_path:,
-                default_thread_count:,
-                version_copyright:)
+      def boot( host_namespace: raise(ArgumentError, 'host_namespace keyword is required'),
+                app_id: raise(ArgumentError, 'app_id keyword is required'),
+                app_name: raise(ArgumentError, 'app_name keyword is required'),
+                company: raise(ArgumentError, 'company keyword is required'),
+                use_config: raise(ArgumentError, 'use_config keyword is required'),
+                default_config_path: raise(ArgumentError, 'default_config_path keyword is required'),
+                default_log_path: raise(ArgumentError, 'default_log_path keyword is required'),
+                default_pid_path: raise(ArgumentError, 'default_pid_path keyword is required'),
+                default_thread_count: raise(ArgumentError, 'default_thread_count keyword is required'),
+                version_copyright: raise(ArgumentError, 'version_copyright keyword is required') )
         Servitude::const_set :NS, host_namespace
 
         const_set :APP_ID, app_id
@@ -32,13 +33,14 @@ module Servitude
         const_set :DEFAULT_LOG_PATH, default_log_path
         const_set :DEFAULT_PID_PATH, default_pid_path
         const_set :DEFAULT_THREAD_COUNT, default_thread_count
+        const_set :USE_CONFIG, use_config
         const_set :VERSION_COPYRIGHT, version_copyright
 
         Servitude::boot_called = true
       end
 
       def configuration
-        @configuration ||= Servitude::NS::Configuration.new
+        @configuration
       end
 
       def configuration=( configuration )

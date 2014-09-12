@@ -1,0 +1,98 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'servitude'
+require 'socket'
+require 'trollop'
+require 'pry'
+
+# The echo server accepts with CLI builds on the 2_echo_server example, addiing a command line interface.
+#
+# Note: Due to TcpServer#accept's implementation, the server is not currently gracefully shutting down as the trap of INT
+# appears to never happen.
+#
+# The CLI has 4 sub-commands: start, stop, status and restart.
+#
+# Using the -i of --interactive switch on the start command will run the server attached in the terminal you execute the command
+# in.  Without the interactive switch, the server will run as a daemon.  The start, stop, and status commands are used to control
+# the daemonized process.  If run in daemon mode, you can tail the log:
+#
+# $ tail -f tmp/echo-server.log
+#
+# Usage:
+#   Help:
+#     bundle exec examples/4_echo_server_with_cli_daemon_and_config -h
+#
+#   Start (interactive):
+#     bundle exec examples/4_echo_server_with_cli_daemon_and_config start -i
+#
+#   Then use telnet to exercise the server:
+#   $ telnet localhost 1234
+#   Hello World!
+#   You said: Hello World!
+#   Connection closed by foreign host.
+#
+module EchoServer
+
+  include Servitude::Base
+
+  APP_FOLDER = 'echo-server'
+  VERSION    = '1.0.0'
+
+  PROJECT_ROOT = File.expand_path( '../..', __FILE__ )
+  
+  boot host_namespace: EchoServer,
+       app_id: 'echo-server-with-cli-and-file-config',
+       app_name: 'Echo Server With CLI And File Config',
+       company: 'LFE',
+       use_config: true,
+       default_config_path: "#{PROJECT_ROOT}/config/4.conf",
+       default_log_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.log",
+       default_pid_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.pid",
+       default_thread_count: nil,
+       version_copyright: "v#{VERSION} \u00A9#{Time.now.year} LFE"
+
+  class Cli
+
+    include Servitude::Cli
+
+  end
+
+  class Server
+
+    include Servitude::Server
+
+    after_initialize do
+      @tcp_server = TCPServer.open( 'localhost', '1234' )
+    end
+
+    finalize do
+      info 'Shutting down ...'
+    end
+
+    def run
+      while client = tcp_server.accept
+        line = client.gets
+        info "Received '#{line.strip}'"
+        response = "You said: #{line.strip}"
+        client.puts response 
+        info "Responded with '#{response}'"
+        info "Closing connection"
+        client.close
+      end
+    end
+
+  protected
+
+    def config_filters
+      %w(threads)
+    end
+
+  private
+
+    attr_reader :tcp_server
+
+  end
+end
+
+EchoServer::Cli.new( ARGV ).run

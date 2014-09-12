@@ -20,8 +20,6 @@ Or install it yourself as:
 
 ## Usage
 
-For executable examples see the [examples folder](https://github.com/midas/servitude/tree/master/examples).
-
 To build a server with Servitude only a couple of steps are required.
 
 * Include the Servitude::Base module in the base module of your server project.
@@ -30,7 +28,8 @@ To build a server with Servitude only a couple of steps are required.
 * If a single threaded server, implement your functionality in the Server#run method.
 * If a multi-threaded server, implement your functionality in a handler class that includes the Servitude::Actor module and call the handler from the Server#run method.
 
-For more details see the examples folder.
+For executable examples see the [examples folder](https://github.com/midas/servitude/tree/master/examples).  To run the examples, clone the project, 
+install the bundle and follow the usage instructions in each example.
 
 The rest of this document will discuss the functionality each module provides.
 
@@ -258,7 +257,7 @@ The Server module provides callbacks to utilize in your server implementation:
 
 * __before_initialize__: executes just before the initilaization of the server
 * __after_initialize__: executes immediately after initilaization of the server
-* __before_run: executes just before the run method is called
+* __before_run__: executes just before the run method is called
 * __before_sleep__: executes just before the main thread sleeps to avoid exiting
 * __finalize__: executes before server exits
 

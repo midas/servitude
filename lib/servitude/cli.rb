@@ -91,9 +91,6 @@ options:
       end
     end
 
-    def self.commands( &block )
-    end
-
     def run
       send( cmd )
     end

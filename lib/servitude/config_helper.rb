@@ -1,5 +1,3 @@
-require 'celluloid/autostart'
-
 module Servitude
   module ConfigHelper
 

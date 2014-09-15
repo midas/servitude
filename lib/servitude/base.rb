@@ -16,20 +16,32 @@ module Servitude
 
     module ClassMethods
 
-      def boot( host_namespace: raise(ArgumentError, 'host_namespace keyword is required'),
-                app_id: host_namespace.name.split( '::' ).join( '-' ).downcase,
-                app_name: host_namespace.name.split( '::' ).join( ' ' ),
-                author: nil, # TODO: Make required when company keyword deprecation expires
+      def boot( host_namespace: nil,
+                app_id: ( host_namespace.name.split( '::' ).join( '-' ).downcase rescue nil ),
+                app_name: ( host_namespace.name.split( '::' ).join( ' ' ) rescue nil ),
+                author: nil,
                 company: nil, # TODO: Remove when company keyword deprecation expires
-                attribution: "v#{host_namespace::VERSION} Copyright © #{Time.now.year} #{author || company}",
+                attribution: ( "v#{host_namespace::VERSION} Copyright © #{Time.now.year} #{author || company}" rescue nil ),
                 use_config: false,
                 default_config_path: nil,
                 default_log_path: nil,
                 default_pid_path: nil,
                 default_thread_count: nil,
                 version_copyright: nil ) # TODO: Remove when version_copyright keyword deprecation expires
+        unless host_namespace
+          raise ArgumentError, 'host_namespace keyword is required'
+        end
+        unless app_id
+          raise ArgumentError, 'app_id keyword is required'
+        end
+        unless app_name
+          raise ArgumentError, 'app_name keyword is required'
+        end
         unless author || company
           raise ArgumentError, 'author keyword is required'
+        end
+        unless attribution || version_copyright
+          raise ArgumentError, 'attribution keyword is required'
         end
 
         # TODO: Remove when company keyword deprecation expires

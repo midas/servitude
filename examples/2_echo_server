@@ -31,13 +31,13 @@ module EchoServer
   boot host_namespace: EchoServer,
        app_id: 'echo-server',
        app_name: 'Echo Server',
-       company: 'LFE',
+       attribution: "v#{VERSION} \u00A9#{Time.now.year} LFE",
+       author: 'LFE',
        use_config: false,
        default_config_path: nil,
        default_log_path: nil,
        default_pid_path: nil,
-       default_thread_count: nil,
-       version_copyright: "v#{VERSION} \u00A9#{Time.now.year} LFE"
+       default_thread_count: nil
 
   class Server
 

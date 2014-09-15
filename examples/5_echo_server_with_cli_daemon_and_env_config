@@ -50,13 +50,13 @@ module EchoServer
   boot host_namespace: EchoServer,
        app_id: 'echo-server-with-cli-and-env-config',
        app_name: 'Echo Server With CLI And Env Config',
-       company: 'LFE',
+       attribution: "v#{VERSION} \u00A9#{Time.now.year} LFE",
+       author: 'LFE',
        use_config: true,
        default_config_path: "#{PROJECT_ROOT}/config/5.conf",
        default_log_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.log",
        default_pid_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.pid",
-       default_thread_count: nil,
-       version_copyright: "v#{VERSION} \u00A9#{Time.now.year} LFE"
+       default_thread_count: nil
 
   class Cli < Servitude::Cli::Service
   end

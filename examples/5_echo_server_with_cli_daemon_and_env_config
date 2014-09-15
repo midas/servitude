@@ -3,8 +3,6 @@
 require 'rubygems'
 require 'servitude'
 require 'socket'
-require 'trollop'
-require 'pry'
 
 # The echo server accepts with CLI builds on the 2_echo_server example, addiing a command line interface.
 #
@@ -21,7 +19,7 @@ require 'pry'
 #
 # Usage:
 #   Help:
-#     bundle exec examples/5_echo_server_with_cli_daemon_and_env_config -h
+#     bundle exec examples/5_echo_server_with_cli_daemon_and_env_config help
 #
 #   Start (interactive):
 #     bundle exec examples/5_echo_server_with_cli_daemon_and_env_config start -i
@@ -60,10 +58,7 @@ module EchoServer
        default_thread_count: nil,
        version_copyright: "v#{VERSION} \u00A9#{Time.now.year} LFE"
 
-  class Cli
-
-    include Servitude::Cli
-
+  class Cli < Servitude::Cli::Service
   end
 
   class Server
@@ -111,4 +106,4 @@ module EchoServer
   end
 end
 
-EchoServer::Cli.new( ARGV ).run
+EchoServer::Cli.start

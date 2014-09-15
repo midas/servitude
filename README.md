@@ -78,11 +78,11 @@ If you do not call ::boot, an error is raised before your server can be started.
 
 ### Servitude::Cli
 
-The Cli module provides the functionality of a Command Line Interface for your server.
+The Cli module provides several classes with Command Line Interface functionality for your server.  The Cli::Service class provides standard unix service
+sub-commands: start, stop, status and restart.
 
     module AwesomeServer
-      class Cli
-        include Servitude::Cli
+      class Cli < Servitude::Cli::Service
       end
     end
 
@@ -90,7 +90,17 @@ In your CLI file (bin/awesome-server):
 
     #!/usr/bin/env ruby
     require 'awesome_server'
-    AwesomeServer::Cli.new( ARGV ).run
+    AwesomeServer::Cli.start
+
+To build a custom CLI, you can inherit from Cli::Base.
+
+    module AwesomeServer
+      class Cli < Servitude::Cli::Base
+      end
+    end
+
+For details on how to add commands to your custom or standard service CLIs see the [Thor documentation](http://whatisthor.com/).
+
 
 ### Servitude::Configuration
 

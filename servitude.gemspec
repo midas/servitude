@@ -28,6 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "hooks", "~> 0"
   spec.add_dependency "oj", "~> 2"
   spec.add_dependency "rainbow", "~> 2"
-  spec.add_dependency "trollop", "~> 2"
+  spec.add_dependency "thor"
   spec.add_dependency "yell", "~> 1"
 end

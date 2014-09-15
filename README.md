@@ -68,12 +68,12 @@ If you do not call ::boot, an error is raised before your server can be started.
       boot host_namespace: AwesomeServer,
            app_id: 'awesome-server',
            app_name: 'Aswesome Server',
-           company: 'Awesome, Inc.',
+           attribution: "v#{VERSION} \u00A9#{Time.now.year} Awesome, Inc."
+           author: 'Awesome, Inc.',
            default_config_path: "/etc/awesome/awesome-server.conf",
            default_log_path: "/var/log/awesome/awesome-server.log",
            default_pid_path: "/var/run/awesome/awesome-server.pid",
            default_thread_count: 1,
-           version_copyright: "v#{VERSION} \u00A9#{Time.now.year} Awesome, Inc."
     end
 
 ### Servitude::Cli

@@ -17,8 +17,8 @@ module Servitude
     module ClassMethods
 
       def boot( host_namespace: raise(ArgumentError, 'host_namespace keyword is required'),
-                app_id: raise(ArgumentError, 'app_id keyword is required'),
-                app_name: raise(ArgumentError, 'app_name keyword is required'),
+                app_id: host_namespace.name.split( '::' ).join( '-' ).downcase,
+                app_name: host_namespace.name.split( '::' ).join( ' ' ),
                 company: raise(ArgumentError, 'company keyword is required'),
                 use_config: false,
                 default_config_path: nil,

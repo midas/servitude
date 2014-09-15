@@ -16,6 +16,7 @@ module Servitude
   autoload :Server,                   'servitude/server'
   autoload :ServerThreaded,           'servitude/server_threaded'
   autoload :SupervisionError,         'servitude/supervision_error'
+  autoload :Util,                     'servitude/util'
 
   INT  = "INT"
   TERM = "TERM"

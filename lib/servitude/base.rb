@@ -1,3 +1,5 @@
+# coding: utf-8
+
 require 'servitude'
 
 module Servitude
@@ -18,12 +20,12 @@ module Servitude
                 app_id: raise(ArgumentError, 'app_id keyword is required'),
                 app_name: raise(ArgumentError, 'app_name keyword is required'),
                 company: raise(ArgumentError, 'company keyword is required'),
-                use_config: raise(ArgumentError, 'use_config keyword is required'),
-                default_config_path: raise(ArgumentError, 'default_config_path keyword is required'),
-                default_log_path: raise(ArgumentError, 'default_log_path keyword is required'),
-                default_pid_path: raise(ArgumentError, 'default_pid_path keyword is required'),
-                default_thread_count: raise(ArgumentError, 'default_thread_count keyword is required'),
-                version_copyright: raise(ArgumentError, 'version_copyright keyword is required') )
+                use_config: false,
+                default_config_path: nil,
+                default_log_path: nil,
+                default_pid_path: nil,
+                default_thread_count: nil,
+                version_copyright: "v#{host_namespace::VERSION} Copyright © #{Time.now.year} #{company}" )
         Servitude::const_set :NS, host_namespace
 
         const_set :APP_ID, app_id

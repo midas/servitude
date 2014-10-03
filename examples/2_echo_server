@@ -27,17 +27,6 @@ module EchoServer
   VERSION    = '1.0.0'
 
   PROJECT_ROOT = File.expand_path( '../..', __FILE__ )
-  
-  boot host_namespace: EchoServer,
-       app_id: 'echo-server',
-       app_name: 'Echo Server',
-       attribution: "v#{VERSION} \u00A9#{Time.now.year} LFE",
-       author: 'LFE',
-       use_config: false,
-       default_config_path: nil,
-       default_log_path: nil,
-       default_pid_path: nil,
-       default_thread_count: nil
 
   class Server
 
@@ -68,6 +57,17 @@ module EchoServer
     attr_reader :tcp_server
 
   end
+
+  boot host_namespace: EchoServer,
+       app_id: 'echo-server',
+       app_name: 'Echo Server',
+       attribution: "v#{VERSION} \u00A9#{Time.now.year} LFE",
+       author: 'LFE',
+       use_config: false,
+       default_config_path: nil,
+       default_log_path: nil,
+       default_pid_path: nil,
+       default_thread_count: nil
 end
 
 EchoServer::Server.new.start

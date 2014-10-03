@@ -14,7 +14,7 @@ module Servitude
 
     def initialize( options )
       @options  = options
-      @name     = options[:name] || Servitude::NS::APP_NAME
+      @name     = options[:name] || Servitude::APP_NAME
       @pid_path = options[:pid] || '.'
       @pid      = get_pid
       @timeout  = options[:timeout] || 10
@@ -37,7 +37,7 @@ module Servitude
     end
 
     def run
-      Servitude::NS::Server.new( options ).start
+      Servitude::SERVER_CLASS.new( options ).start
     end
 
     def stop
@@ -46,7 +46,7 @@ module Servitude
           remove_pid
         when :failed_to_stop
         when :does_not_exist
-          puts "#{Servitude::NS::APP_NAME} process is not running"
+          puts "#{Servitude::APP_NAME} process is not running"
           prompt_and_remove_pid_file if pid_file_exists?
         else
           raise 'Unknown return code from #kill_process'
@@ -55,9 +55,9 @@ module Servitude
 
     def status
       if process_exists?
-        puts "#{Servitude::NS::APP_NAME} process running with PID: #{pid}"
+        puts "#{Servitude::APP_NAME} process running with PID: #{pid}"
       else
-        puts "#{Servitude::NS::APP_NAME} process does not exist"
+        puts "#{Servitude::APP_NAME} process does not exist"
         prompt_and_remove_pid_file if pid_file_exists?
       end
     end
@@ -110,7 +110,7 @@ module Servitude
     def kill_process
       return :does_not_exist unless process_exists?
 
-      $stdout.write "Attempting to stop #{Servitude::NS::APP_NAME} process #{pid}..."
+      $stdout.write "Attempting to stop #{Servitude::APP_NAME} process #{pid}..."
       Process.kill INT, pid
 
       iteration_num = 0
@@ -121,10 +121,10 @@ module Servitude
       end
 
       if process_exists?
-        $stderr.puts "\nFailed to stop #{Servitude::NS::APP_NAME} process #{pid}"
+        $stderr.puts "\nFailed to stop #{Servitude::APP_NAME} process #{pid}"
         return :failed_to_stop
       else
-        $stdout.puts "\nSuccessfuly stopped #{Servitude::NS::APP_NAME} process #{pid}"
+        $stdout.puts "\nSuccessfuly stopped #{Servitude::APP_NAME} process #{pid}"
       end
 
       return :success

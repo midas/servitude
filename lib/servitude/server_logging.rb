@@ -1,5 +1,3 @@
-require 'yell'
-
 # Provides logging services for the base server.
 #
 module Servitude
@@ -8,16 +6,12 @@ module Servitude
   protected
 
     def initialize_loggers
-      Servitude::NS.logger = Yell.new do |l|
-        l.level = log_level
-        l.adapter $stdout, :level => [:debug, :info, :warn]
-        l.adapter $stderr, :level => [:error, :fatal]
-      end
+      Servitude.initialize_loggers log_level: log_level
     end
 
     def log_startup
       start_banner.each do |line|
-        Servitude::NS.logger.info line
+        Servitude.logger.info line
       end
     end
 
@@ -25,19 +19,19 @@ module Servitude
       [
         "",
         "***",
-        "* #{Servitude::NS::APP_NAME} started",
+        "* #{Servitude::APP_NAME} started",
         "*",
-        "* #{Servitude::NS::VERSION_COPYRIGHT}",
+        "* #{Servitude::VERSION_COPYRIGHT}",
         "*",
-        (Servitude::NS::configuration.empty? ? nil : "* Configuration"),
-        PrettyPrint::configuration_lines( Servitude::NS::configuration, "*  ", all_config_filters ),
-        (Servitude::NS::configuration.empty? ? nil : "*"),
+        (Servitude.configuration.empty? ? nil : "* Configuration"),
+        PrettyPrint::configuration_lines( Servitude.configuration, "*  ", all_config_filters ),
+        (Servitude.configuration.empty? ? nil : "*"),
         "***",
       ].flatten.reject( &:nil? )
     end
 
     def log_level
-      ((Servitude::NS::configuration.log_level || :info).to_sym rescue :info)
+      (Servitude.configuration.log_level.to_sym rescue :info)
     end
 
     def all_config_filters
@@ -59,7 +53,7 @@ module Servitude
     end
 
     #def config_value( key )
-      #value = Servitude::NS.configuration.send( key )
+      #value = Servitude.configuration.send( key )
 
       #return value unless value.is_a?( Hash )
 

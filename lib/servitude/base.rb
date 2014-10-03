@@ -27,6 +27,7 @@ module Servitude
                 default_log_path: nil,
                 default_pid_path: nil,
                 default_thread_count: nil,
+                server_class: ( host_namespace::Server rescue nil ),
                 version_copyright: nil ) # TODO: Remove when version_copyright keyword deprecation expires
         unless host_namespace
           raise ArgumentError, 'host_namespace keyword is required'
@@ -51,6 +52,10 @@ module Servitude
           author = company
         end
 
+        unless server_class
+          raise ArgumentError, "server_class keyword is required because the default, #{host_namespace.name}::Server, is not defined"
+        end
+
         # TODO: Remove when version_copyright keyword deprecation expires
         if version_copyright
           Util.deprecate "#{Base.name}.boot version_copyright: #{version_copyright.inspect}",
@@ -58,8 +63,7 @@ module Servitude
           attribution = version_copyright
         end
 
-        Servitude::const_set :NS, host_namespace
-
+        # TODO: Remove when host namespace deprecation expires
         const_set :APP_ID, app_id
         const_set :APP_NAME, app_name
         const_set :AUTHOR, author
@@ -71,6 +75,19 @@ module Servitude
         const_set :DEFAULT_THREAD_COUNT, default_thread_count
         const_set :USE_CONFIG, use_config
         const_set :VERSION_COPYRIGHT, attribution # TODO: Remove when version_copyright keyword deprecation expires
+
+        Servitude.const_set :APP_ID, app_id
+        Servitude.const_set :APP_NAME, app_name
+        Servitude.const_set :AUTHOR, author
+        Servitude.const_set :COMPANY, author # TODO: Remove when company keyword deprecation expires
+        Servitude.const_set :ATTRIBUTION, attribution
+        Servitude.const_set :DEFAULT_CONFIG_PATH, default_config_path
+        Servitude.const_set :DEFAULT_LOG_PATH, default_log_path
+        Servitude.const_set :DEFAULT_PID_PATH, default_pid_path
+        Servitude.const_set :DEFAULT_THREAD_COUNT, default_thread_count
+        Servitude.const_set :SERVER_CLASS, server_class
+        Servitude.const_set :USE_CONFIG, use_config
+        Servitude.const_set :VERSION_COPYRIGHT, attribution # TODO: Remove when version_copyright keyword deprecation expires
 
         Servitude::boot_called = true
       end

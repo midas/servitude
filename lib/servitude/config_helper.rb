@@ -2,7 +2,7 @@ module Servitude
   module ConfigHelper
 
     def config
-      Servitude::NS::configuration
+      Servitude.configuration
     end
 
   end

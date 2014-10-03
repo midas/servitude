@@ -73,7 +73,7 @@ If you do not call ::boot, an error is raised before your server can be started.
            default_config_path: "/etc/awesome/awesome-server.conf",
            default_log_path: "/var/log/awesome/awesome-server.log",
            default_pid_path: "/var/run/awesome/awesome-server.pid",
-           default_thread_count: 1,
+           default_thread_count: 1
     end
 
 ### Servitude::Cli
@@ -352,3 +352,8 @@ The #with_supervision block implements error handling/retry logic required to co
 The #some_event_generated_block method call in the code block above represents some even that happend that needs to be processed.  All servers sleep until an event 
 happens and then do some work, respond and then go back to sleep.  Some good examples are receiving packets form a TCP/UDP socket or receiving a message from a 
 message queue.
+
+
+## Contributors
+
+* Nils Jonsson [njonsson](https://github.com/njonsson)

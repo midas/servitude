@@ -38,20 +38,6 @@ module EchoServer
   VERSION    = '1.0.0'
 
   PROJECT_ROOT = File.expand_path( '../..', __FILE__ )
-  
-  boot host_namespace: EchoServer,
-       app_id: 'echo-server-with-cli',
-       app_name: 'Echo Server With CLI',
-       attribution: "v#{VERSION} \u00A9#{Time.now.year} LFE",
-       author: 'LFE',
-       use_config: false,
-       default_config_path: "#{PROJECT_ROOT}}/config/#{APP_FOLDER}.conf",
-       default_log_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.log",
-       default_pid_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.pid",
-       default_thread_count: nil
-
-  class Cli < Servitude::Cli::Service
-  end
 
   class Server
 
@@ -88,6 +74,21 @@ module EchoServer
     attr_reader :tcp_server
 
   end
+
+  boot host_namespace: EchoServer,
+       app_id: 'echo-server-with-cli',
+       app_name: 'Echo Server With CLI',
+       attribution: "v#{VERSION} \u00A9#{Time.now.year} LFE",
+       author: 'LFE',
+       use_config: false,
+       default_config_path: "#{PROJECT_ROOT}}/config/#{APP_FOLDER}.conf",
+       default_log_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.log",
+       default_pid_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.pid",
+       default_thread_count: nil
+
+  class Cli < Servitude::Cli::Service
+  end
+
 end
 
 EchoServer::Cli.start

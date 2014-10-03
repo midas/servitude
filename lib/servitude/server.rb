@@ -53,7 +53,7 @@ module Servitude
     end
 
     def initialize_config
-      Servitude::NS::configuration = configuration_class.new( cli_options )
+      Servitude.configuration = configuration_class.new( cli_options )
     end
 
     def configuration_class

@@ -11,7 +11,7 @@ module Servitude
 
       define_method level do |*messages|
         messages.each do |message|
-          Servitude::NS.logger.send level, message
+          Servitude.logger.send level, message
         end
       end
 

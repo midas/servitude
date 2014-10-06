@@ -23,7 +23,7 @@ module Servitude
     attr_reader :_config
 
     def file_options( file_path )
-      unless File.exists?( file_path )
+      unless File.file?( file_path )
         raise "Configuration file #{file_path} does not exist"
       end
 

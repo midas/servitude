@@ -74,7 +74,7 @@ module Servitude
     end
 
     def remove_pid
-      FileUtils.rm( pid_path ) if File.exists?( pid_path )
+      FileUtils.rm( pid_path ) if File.file?( pid_path )
     end
 
     def store_pid( pid )
@@ -87,7 +87,7 @@ module Servitude
     end
 
     def get_pid
-      return nil unless File.exists?( pid_path )
+      return nil unless File.file?( pid_path )
 
       pid = nil
 
@@ -133,7 +133,7 @@ module Servitude
     end
 
     def pid_file_exists?
-      File.exists?( pid_path )
+      File.file? pid_path
     end
 
     def process_exists?

@@ -41,7 +41,7 @@ module Servitude
       no_commands do
 
         def start_interactive
-          server = Servitude::SERVER_CLASS.new( options.merge( use_config: Servitude::USE_CONFIG, log: 'STDOUT' ))
+          server = Servitude::server_class.new( options.merge( use_config: Servitude::USE_CONFIG, log: 'STDOUT' ))
           server.start
         end
 

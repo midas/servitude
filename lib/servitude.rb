@@ -40,6 +40,15 @@ module Servitude
         end
       end
     end
+
+    def server_class
+      case SERVER_CLASS
+        when String, Symbol
+          eval SERVER_CLASS.to_s, binding, __FILE__, __LINE__
+        else
+          SERVER_CLASS
+      end
+    end
   end
 
   Servitude.initialize_loggers log_level: :info

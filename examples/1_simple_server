@@ -21,6 +21,17 @@ module SimpleServer
   VERSION    = '1.0.0'
 
   PROJECT_ROOT = File.expand_path( '../..', __FILE__ )
+  
+  boot host_namespace: SimpleServer,
+       app_id: 'simple-server',
+       app_name: 'Simple Server',
+       attribution: "v#{VERSION} \u00A9#{Time.now.year} LFE",
+       author: 'LFE',
+       use_config: false,
+       default_config_path: nil,
+       default_log_path: nil,
+       default_pid_path: nil,
+       default_thread_count: nil
 
   class Server
 
@@ -35,17 +46,6 @@ module SimpleServer
     end
 
   end
-
-  boot host_namespace: SimpleServer,
-       app_id: 'simple-server',
-       app_name: 'Simple Server',
-       attribution: "v#{VERSION} \u00A9#{Time.now.year} LFE",
-       author: 'LFE',
-       use_config: false,
-       default_config_path: nil,
-       default_log_path: nil,
-       default_pid_path: nil,
-       default_thread_count: nil
 end
 
 SimpleServer::Server.new.start

@@ -27,7 +27,7 @@ module Servitude
                 default_log_path: nil,
                 default_pid_path: nil,
                 default_thread_count: nil,
-                server_class: ( host_namespace::Server rescue nil ),
+                server_class: ( host_namespace::Server rescue "#{host_namespace.name}::Server" ),
                 version_copyright: nil ) # TODO: Remove when version_copyright keyword deprecation expires
         unless host_namespace
           raise ArgumentError, 'host_namespace keyword is required'
@@ -53,7 +53,7 @@ module Servitude
         end
 
         unless server_class
-          raise ArgumentError, "server_class keyword is required because the default, #{host_namespace.name}::Server, is not defined"
+          raise ArgumentError, 'server_class keyword is required'
         end
 
         # TODO: Remove when version_copyright keyword deprecation expires

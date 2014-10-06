@@ -37,7 +37,7 @@ module Servitude
     end
 
     def run
-      Servitude::SERVER_CLASS.new( options ).start
+      Servitude::server_class.new( options ).start
     end
 
     def stop

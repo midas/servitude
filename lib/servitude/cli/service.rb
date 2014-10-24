@@ -55,7 +55,8 @@ module Servitude
       desc "status", "Check the status of the server daemon"
       pid_option
       def status
-        Servitude::Daemon.new( options.merge( use_config: Servitude::USE_CONFIG )).status
+        result = Servitude::Daemon.new( options.merge( use_config: Servitude::USE_CONFIG )).status
+        at_exit { exit result }
       end
 
       desc "stop", "Stop the server daemon"

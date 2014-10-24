@@ -56,9 +56,11 @@ module Servitude
     def status
       if process_exists?
         puts "#{Servitude::APP_NAME} process running with PID: #{pid}"
+        true
       else
         puts "#{Servitude::APP_NAME} process does not exist"
         prompt_and_remove_pid_file if pid_file_exists?
+        false
       end
     end
 

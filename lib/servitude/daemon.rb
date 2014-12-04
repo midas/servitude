@@ -59,7 +59,7 @@ module Servitude
         true
       else
         puts "#{Servitude::APP_NAME} process does not exist"
-        prompt_and_remove_pid_file if pid_file_exists?
+        prompt_and_remove_pid_file if pid_file_exists? && !options[:quiet]
         false
       end
     end

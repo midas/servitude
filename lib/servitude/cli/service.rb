@@ -54,6 +54,7 @@ module Servitude
 
       desc "status", "Check the status of the server daemon"
       pid_option
+      method_option :quiet, type: :boolean, aliases: '-q', desc: "Do not prompt to remove an old PID file", default: false
       def status
         result = Servitude::Daemon.new( options.merge( use_config: Servitude::USE_CONFIG )).status
         at_exit { exit result }

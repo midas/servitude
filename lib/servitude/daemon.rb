@@ -89,16 +89,21 @@ module Servitude
     end
 
     def get_pid
-      return nil unless File.file?( pid_path )
+      pid = begin
+              File.read( pid_path ).chomp
+            rescue Errno::ENOENT # No such file or directory
+              return nil
+            rescue Errno::EACCES # Permission denied
+              $stderr.puts "No permission to read #{pid_path}"
+              return nil
+            rescue => e
+              $stderr.puts "Unable to read #{pid_path}\n\t(#{e.class.name}) #{e.message}"
+              return nil
+            end
 
-      pid = nil
+      return pid.to_i if ( pid =~ /^[1-9][0-9]*$/ )
 
-      File.open( @pid_path, 'r' ) do |f|
-        pid = f.readline.to_s.gsub( /[^0-9]/, '' )
-      end
-
-      pid.to_i
-    rescue Errno::ENOENT
+      $stderr.puts "#{pid_path} does not contain a PID"
       nil
     end
 
@@ -146,6 +151,9 @@ module Servitude
       false
     rescue Errno::EPERM
       $stderr.puts "No permission to query #{pid}!";
+      false
+    rescue => e
+      $stderr.puts "Unable to query #{pid}\n\t(#{e.class.name}) #{e.message}"
       false
     end
 

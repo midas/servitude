@@ -47,7 +47,7 @@ module Servitude
         when :failed_to_stop
         when :does_not_exist
           puts "#{Servitude::APP_NAME} process is not running"
-          prompt_and_remove_pid_file if pid_file_exists?
+          prompt_and_remove_pid_file if pid_file_exists? && !options[:quiet]
         else
           raise 'Unknown return code from #kill_process'
       end

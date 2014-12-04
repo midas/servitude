@@ -67,9 +67,9 @@ module Servitude
   protected
 
     def prompt_and_remove_pid_file
-      puts "PID file still exists at '#{pid_path}', would you like to remove it (y/n)?"
+      $stdout.write "PID file still exists at '#{pid_path}'. Remove it [y/N]? "
       answer = $stdin.gets.strip
-      if answer == 'y'
+      if answer =~ /^y(es)?$/i
         remove_pid
         puts "Removed PID file"
       end

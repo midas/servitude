@@ -62,6 +62,7 @@ module Servitude
 
       desc "stop", "Stop the server daemon"
       pid_option
+      method_option :quiet, type: :boolean, aliases: '-q', desc: "Do not prompt to remove an old PID file", default: false
       def stop
         server = Servitude::Daemon.new( options.merge( use_config: Servitude::USE_CONFIG ))
         server.stop

@@ -23,10 +23,12 @@ module Servitude
       rescue Servitude::SupervisionError
         # supervisor is restarting actor
         warn_for_supevision_error
+        sleep( config.supervision_retry_timeout || 0 )
         retry
       rescue Celluloid::DeadActorError
         # supervisor has yet to begin restarting actor
         warn_for_dead_actor_error
+        sleep( config.supervision_retry_timeout || 0 )
         retry
       rescue => e
         handle_error( payload, delivery_info, e )

@@ -1,9 +1,12 @@
+require 'celluloid'
+
 module Servitude
   module ServerThreaded
 
     def self.included( base )
       base.class_eval do
         after_initialize :initialize_thread
+        after_initialize :initialize_celluloid_logger
       end
     end
 
@@ -67,6 +70,10 @@ module Servitude
 
     def handler
       Celluloid::Actor[:handler]
+    end
+
+    def initialize_celluloid_logger
+      Celluloid.logger = nil
     end
 
     def initialize_thread

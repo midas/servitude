@@ -22,13 +22,21 @@ module Servitude
         block.call
       rescue Servitude::SupervisionError
         # supervisor is restarting actor
-        #warn ANSI.cyan { "RETRYING due to waiting on supervisor to restart actor ..." }
+        warn_for_supevision_error
         retry
       rescue Celluloid::DeadActorError
         # supervisor has yet to begin restarting actor
-        #warn ANSI.blue { "RETRYING due to Celluloid::DeadActorError ..." }
+        warn_for_dead_actor_error
         retry
       end
+    end
+
+    def warn_for_supevision_error
+      warn "RETRYING due to waiting on supervisor to restart actor ..."
+    end
+
+    def warn_for_dead_actor_error
+      warn "RETRYING due to Celluloid::DeadActorError ..."
     end
 
     # Correctly calls a single supervised actor when the threads configuraiton is set

@@ -20,7 +20,7 @@ module Servitude
       raise NotImplementedError
     end
 
-    def with_supervision( &block )
+    def with_supervision( options={}, &block )
       begin
         block.call
       rescue Servitude::SupervisionError
@@ -34,7 +34,7 @@ module Servitude
         sleep( config.supervision_retry_timeout || 0 )
         retry
       rescue => e
-        handle_error( payload, delivery_info, e )
+        handle_error( options, e )
       end
     end
 
@@ -46,8 +46,13 @@ module Servitude
       warn "RETRYING due to Celluloid::DeadActorError ..."
     end
 
-    def handle_error( payload, delivery_info, e )
-      error( "#{e.class.name} | #{e.message} | #{e.backtrace.inspect}" )
+    def handle_error( options, e )
+      parts = [[e.class.name, e.message].join( ' ' ), format_backtrace( e.backtrace )]
+      error( parts.join( "\n" ))
+    end
+
+    def format_backtrace( backtrace )
+      "  #{backtrace.join "\n  "}"
     end
 
     # Correctly calls a single supervised actor when the threads configuraiton is set

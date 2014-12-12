@@ -9,6 +9,14 @@ module Servitude
 
   protected
 
+    def handler_class
+      raise NotImplementedError
+    end
+
+    def run
+      raise NotImplementedError
+    end
+
     def with_supervision( &block )
       begin
         block.call
@@ -35,14 +43,6 @@ module Servitude
         raise Servitude::SupervisionError unless handler
         handler.call( options )
       end
-    end
-
-    def handler_class
-      raise NotImplementedError
-    end
-
-    def run
-      raise NotImplementedError
     end
 
     def pool

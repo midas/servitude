@@ -42,7 +42,6 @@ module Servitude
       %w(
         help
         interactive
-        interactive_given
       )
     end
 

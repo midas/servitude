@@ -26,15 +26,23 @@ module Servitude
       rescue Servitude::SupervisionError
         # supervisor is restarting actor
         warn_for_supevision_error
-        sleep( config.supervision_retry_timeout || 0 )
+        notify_and_sleep_if_configured
         retry
       rescue Celluloid::DeadActorError
         # supervisor has yet to begin restarting actor
         warn_for_dead_actor_error
-        sleep( config.supervision_retry_timeout || 0 )
+        notify_and_sleep_if_configured
         retry
       rescue => e
         handle_error( options, e )
+      end
+    end
+
+    def notify_and_sleep_if_configured
+      if config.supervision_retry_timeout_in_seconds &&
+          config.supervision_retry_timeout_in_seconds > 0
+        debug "Sleeping for #{config.supervision_retry_timeout_in_seconds}s ..."
+        sleep( config.supervision_retry_timeout_in_seconds )
       end
     end
 

@@ -28,6 +28,8 @@ module Servitude
         # supervisor has yet to begin restarting actor
         warn_for_dead_actor_error
         retry
+      rescue => e
+        handle_error( payload, delivery_info, e )
       end
     end
 
@@ -37,6 +39,10 @@ module Servitude
 
     def warn_for_dead_actor_error
       warn "RETRYING due to Celluloid::DeadActorError ..."
+    end
+
+    def handle_error( payload, delivery_info, e )
+      error( "#{e.class.name} | #{e.message} | #{e.backtrace.inspect}" )
     end
 
     # Correctly calls a single supervised actor when the threads configuraiton is set

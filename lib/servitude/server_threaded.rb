@@ -29,7 +29,7 @@ module Servitude
     # is attempted.
     #
     def call_handler_respecting_thread_count( options )
-      if options[:threads] > 1
+      if config.threads > 1
         pool.async.call( options )
       else
         raise Servitude::SupervisionError unless handler
@@ -46,7 +46,7 @@ module Servitude
     end
 
     def pool
-      @pool ||= handler_class.pool( size: options[:threads] )
+      @pool ||= handler_class.pool( size: config.threads )
     end
 
     def handler
@@ -54,7 +54,7 @@ module Servitude
     end
 
     def initialize_thread
-      return unless options[:threads] == 1
+      return unless config.threads == 1
       handler_class.supervise_as :handler
     end
 

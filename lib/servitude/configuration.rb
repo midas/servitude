@@ -1,33 +1,58 @@
-require 'delegate'
 require 'hashie'
-require 'oj'
+#require 'oj'
+require 'pathname'
+require 'yaml'
 
 module Servitude
-  class Configuration < SimpleDelegator
+  class Configuration < Hashie::Mash
 
-    def initialize( options={} )
-      options.reject! { |k,v| v.nil? }
+    def self.load( options={} )
+      merged_options = defaults.merge( file_options )
+      merged_options = merged_options.merge( options )
+      new( merged_options )
+    end
 
-      if options[:use_config]
-        @_config = Hashie::Mash.new( file_options( options[:config] ))
-        _config.merge!( options )
-      else
-        @_config = Hashie::Mash.new( options )
-      end
+    def self.config_filepath
+      Servitude::DEFAULT_CONFIG_PATH
+    end
 
-      super _config
+    def config_filepath
+      Pathname.new( self.class.config_filepath )
+    end
+
+    def slice( *keys )
+      klass.new( select { |k,v| keys.map( &:to_s ).include?( k ) } )
+    end
+
+    def for_env
+      return Hashie::Mash.new({}) unless env
+      self[env]
     end
 
   protected
 
-    attr_reader :_config
+    # Override to povide default config values
+    #
+    def self.defaults
+      {
+        threads: 1
+      }
+    end
 
-    def file_options( file_path )
-      unless File.file?( file_path )
-        raise "Configuration file #{file_path} does not exist"
-      end
+    def self.file_options
+      return {} unless config_filepath
 
-      Oj.load( File.read( file_path ))
+      File.exists?( config_filepath ) ?
+        load_file_options :
+        {}
+    end
+
+    def self.load_file_options
+      YAML::load( File.read( config_filepath ))
+    end
+
+    def klass
+      self.class
     end
 
   end

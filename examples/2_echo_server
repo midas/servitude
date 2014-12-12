@@ -35,9 +35,6 @@ module EchoServer
        author: 'LFE',
        use_config: false,
        default_config_path: nil,
-       default_log_path: nil,
-       default_pid_path: nil,
-       default_thread_count: nil
 
   class Server
 

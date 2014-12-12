@@ -24,9 +24,6 @@ module Servitude
                 attribution: ( "v#{host_namespace::VERSION} Copyright © #{Time.now.year} #{author || company}" rescue nil ),
                 use_config: false,
                 default_config_path: nil,
-                default_log_path: nil,
-                default_pid_path: nil,
-                default_thread_count: nil,
                 server_class: ( host_namespace::Server rescue "#{host_namespace.name}::Server" ),
                 version_copyright: nil ) # TODO: Remove when version_copyright keyword deprecation expires
         unless host_namespace
@@ -70,9 +67,6 @@ module Servitude
         const_set :COMPANY, author # TODO: Remove when company keyword deprecation expires
         const_set :ATTRIBUTION, attribution
         const_set :DEFAULT_CONFIG_PATH, default_config_path
-        const_set :DEFAULT_LOG_PATH, default_log_path
-        const_set :DEFAULT_PID_PATH, default_pid_path
-        const_set :DEFAULT_THREAD_COUNT, default_thread_count
         const_set :USE_CONFIG, use_config
         const_set :VERSION_COPYRIGHT, attribution # TODO: Remove when version_copyright keyword deprecation expires
 
@@ -82,9 +76,6 @@ module Servitude
         Servitude.const_set :COMPANY, author # TODO: Remove when company keyword deprecation expires
         Servitude.const_set :ATTRIBUTION, attribution
         Servitude.const_set :DEFAULT_CONFIG_PATH, default_config_path
-        Servitude.const_set :DEFAULT_LOG_PATH, default_log_path
-        Servitude.const_set :DEFAULT_PID_PATH, default_pid_path
-        Servitude.const_set :DEFAULT_THREAD_COUNT, default_thread_count
         Servitude.const_set :SERVER_CLASS, server_class
         Servitude.const_set :USE_CONFIG, use_config
         Servitude.const_set :VERSION_COPYRIGHT, attribution # TODO: Remove when version_copyright keyword deprecation expires

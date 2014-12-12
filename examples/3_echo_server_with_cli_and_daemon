@@ -46,9 +46,6 @@ module EchoServer
        author: 'LFE',
        use_config: false,
        default_config_path: "#{PROJECT_ROOT}}/config/#{APP_FOLDER}.conf",
-       default_log_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.log",
-       default_pid_path: "#{PROJECT_ROOT}/tmp/#{APP_FOLDER}.pid",
-       default_thread_count: nil
 
   class Cli < Servitude::Cli::Service
   end

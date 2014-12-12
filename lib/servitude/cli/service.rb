@@ -7,15 +7,15 @@ module Servitude
       end
 
       def self.pid_option
-        method_option :pid, desc: "The path for the PID file", type: :string, default: Servitude::DEFAULT_PID_PATH
+        method_option :pid, desc: "The path for the PID file", type: :string
       end
 
       def self.common_start_options
         method_option :config, type: :string, aliases: '-c', desc: "The path for the config file", default: Servitude::DEFAULT_CONFIG_PATH
         environment_option
-        method_option :log_level, desc: "The log level", type: :string, aliases: '-o', default: 'info'
-        method_option :log, desc: "The path for the log file", type: :string, aliases: '-l', default: Servitude::DEFAULT_LOG_PATH
-        method_option :threads, desc: "The number of threads", type: :numeric, aliases: '-t', default: Servitude::DEFAULT_THREAD_COUNT
+        method_option :log_level, desc: "The log level", type: :string, aliases: '-o'
+        method_option :log, desc: "The path for the log file", type: :string, aliases: '-l'
+        method_option :threads, desc: "The number of threads", type: :numeric, aliases: '-t'
       end
 
       desc "restart", "Stop and start the server"

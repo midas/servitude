@@ -42,7 +42,6 @@ module Servitude
 
         def start_interactive
           server = Servitude::server_class.new( configuration( options, use_config: Servitude::USE_CONFIG, log: 'STDOUT' ))
-          binding.pry
           server.start
         end
 

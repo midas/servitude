@@ -29,7 +29,6 @@ module Servitude
       @cli_options = cli_options
 
       run_hook :before_initialize
-      initialize_config
       initialize_loggers
       run_hook :after_initialize
     end
@@ -50,14 +49,6 @@ module Servitude
 
     def run
       raise NotImplementedError
-    end
-
-    def initialize_config
-      Servitude.configuration = configuration_class.load( cli_options )
-    end
-
-    def configuration_class
-      Servitude::Configuration
     end
 
   private

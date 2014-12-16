@@ -102,23 +102,17 @@ For details on how to add commands to your custom or standard service CLIs see t
 ### Servitude::Configuration
 
 All Servitude servers automatically have a configuration instantiated for them (although it may be empty).  The default class for the configuration is
-Servitude::Configuration.  In order to define a custom configuration, define a custom configuraiton class (which may inherit from Servitude::Configuration)
-and simply override the Servitude::Server#configuration method in your Server class.  Be sure the custom configuration calss accepts the command line
+Servitude::Configuration.  In order to define a custom configuration, define a custom configuration class (which may inherit from Servitude::Configuration)
+and simply override the Servitude::Cli::Service#configuration method in your Server class.  Be sure the custom configuration calss accepts the command line
 options and passes them to the super class's initializer or configuration will be completely broken.
 
     module AwesomeServer
-      class Configuration < Servitude::Configuration
-        def initialize( cli_options )
-          super( cli_options )
-          # possibly do something else ...
-        end
-      end
-
-      class Server
-        include Servitude::Server
-
-        def configuration_class
-          AwesomeServer::Configuration
+      class Cli < Servitude::Cli::Base
+        # necessary so Thor does not pick this method up as a CLI method
+        no_commands do
+          def configuration_class
+            AwesomeServer::Configuration
+          end
         end
       end
     end

@@ -41,13 +41,23 @@ module Servitude
       no_commands do
 
         def start_interactive
-          server = Servitude::server_class.new( options.merge( use_config: Servitude::USE_CONFIG, log: 'STDOUT' ))
+          server = Servitude::server_class.new( configuration( options, use_config: Servitude::USE_CONFIG, log: 'STDOUT' ))
+          binding.pry
           server.start
         end
 
         def start_daemon
-          server = Servitude::Daemon.new( options.merge( use_config: Servitude::USE_CONFIG ))
+          server = Servitude::Daemon.new( configuration( options, use_config: Servitude::USE_CONFIG ))
           server.start
+        end
+
+        def configuration_class
+          Servitude::Configuration
+        end
+
+        def configuration( options, additional_options={} )
+          options = options.merge( additional_options )
+          Servitude.configuration = configuration_class.load( options )
         end
 
       end
@@ -56,7 +66,7 @@ module Servitude
       pid_option
       method_option :quiet, type: :boolean, aliases: '-q', desc: "Do not prompt to remove an old PID file", default: false
       def status
-        result = Servitude::Daemon.new( options.merge( use_config: Servitude::USE_CONFIG )).status
+        result = Servitude::Daemon.new( configuration( options, use_config: Servitude::USE_CONFIG  )).status
         at_exit { exit result }
       end
 
@@ -64,7 +74,7 @@ module Servitude
       pid_option
       method_option :quiet, type: :boolean, aliases: '-q', desc: "Do not prompt to remove an old PID file", default: false
       def stop
-        server = Servitude::Daemon.new( options.merge( use_config: Servitude::USE_CONFIG ))
+        server = Servitude::Daemon.new( configuration( options, use_config: Servitude::USE_CONFIG ))
         server.stop
       end
 

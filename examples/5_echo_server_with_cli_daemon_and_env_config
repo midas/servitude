@@ -53,9 +53,18 @@ module EchoServer
        attribution: "v#{VERSION} \u00A9#{Time.now.year} LFE",
        author: 'LFE',
        use_config: true,
-       default_config_path: "#{PROJECT_ROOT}/config/5.conf",
+       default_config_path: "#{PROJECT_ROOT}/config/5.conf"
 
   class Cli < Servitude::Cli::Service
+
+    no_commands do
+
+      def configuration_class
+        Servitude::EnvironmentConfiguration
+      end
+
+    end
+
   end
 
   class Server
@@ -87,10 +96,6 @@ module EchoServer
     end
 
   protected
-
-    def configuration_class
-      Servitude::EnvironmentConfiguration
-    end
 
     def config_filters
       %w(threads)

@@ -1,3 +1,5 @@
+require 'servitude'
+
 # Provides logging services for the base server.
 #
 module Servitude

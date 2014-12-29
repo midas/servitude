@@ -1,5 +1,5 @@
-require 'rubygems'
 require 'fileutils'
+require 'servitude'
 require 'timeout'
 
 module Servitude

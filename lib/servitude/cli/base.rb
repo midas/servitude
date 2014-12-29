@@ -1,3 +1,5 @@
+require 'thor'
+
 module Servitude
   module Cli
     class Base < Thor

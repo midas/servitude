@@ -1,6 +1,6 @@
 require 'hashie'
-#require 'oj'
 require 'pathname'
+require 'servitude'
 require 'yaml'
 
 module Servitude

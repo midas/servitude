@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'autoloaded'
 require 'servitude'
 require 'thor'
 require 'yell'
@@ -7,8 +8,7 @@ require 'yell'
 module Servitude
   module Cli
 
-    autoload :Base,    'servitude/cli/base'
-    autoload :Service, 'servitude/cli/service'
+    Autoloaded.module { }
 
   end
 end

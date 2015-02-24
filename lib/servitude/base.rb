@@ -41,7 +41,6 @@ module Servitude
         end
 
 
-        # TODO: Remove when host namespace deprecation expires
         const_set :APP_ID, app_id
         const_set :APP_NAME, app_name
         const_set :AUTHOR, author

@@ -22,13 +22,12 @@ module SimpleServer
 
   PROJECT_ROOT = File.expand_path( '../..', __FILE__ )
   
-  boot host_namespace: SimpleServer,
-       app_id: 'simple-server',
+  boot app_id: 'simple-server',
        app_name: 'Simple Server',
        attribution: "v#{VERSION} \u00A9#{Time.now.year} LFE",
        author: 'LFE',
        use_config: false,
-       default_config_path: nil,
+       default_config_path: nil
 
   class Server
 

@@ -39,13 +39,12 @@ module EchoServer
 
   PROJECT_ROOT = File.expand_path( '../..', __FILE__ )
   
-  boot host_namespace: EchoServer,
-       app_id: 'echo-server-with-cli-and-file-config',
+  boot app_id: 'echo-server-with-cli-and-file-config',
        app_name: 'Echo Server With CLI And File Config',
        attribution: "v#{VERSION} \u00A9#{Time.now.year} LFE",
        author: 'LFE',
        use_config: true,
-       default_config_path: "#{PROJECT_ROOT}/config/4.conf",
+       default_config_path: "#{PROJECT_ROOT}/config/4.conf"
 
   class Cli < Servitude::Cli::Service
   end

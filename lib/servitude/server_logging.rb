@@ -21,7 +21,7 @@ module Servitude
         "***",
         "* #{Servitude::APP_NAME} started",
         "*",
-        "* #{Servitude::VERSION_COPYRIGHT}",
+        "* #{Servitude::ATTRIBUTION}",
         "*",
         (Servitude.configuration.empty? ? nil : "* Configuration"),
         PrettyPrint::configuration_lines( Servitude.configuration, "*  ", all_config_filters ),

@@ -35,20 +35,30 @@ module Servitude
 
     def start
       log_startup
-
-      trap( INT )  { stop }
-      trap( TERM ) { stop }
-
-      run_hook :before_run
-      run
-      run_hook :before_sleep
-      sleep
+      setup_signal_handling
+      run_sequence
+      sleep_sequence
     end
 
   protected
 
     def run
       raise NotImplementedError
+    end
+
+    def run_sequence
+      run_hook :before_run
+      run
+    end
+
+    def sleep_sequence
+      run_hook :before_sleep
+      sleep
+    end
+
+    def setup_signal_handling
+      trap( INT )  { stop }
+      trap( TERM ) { stop }
     end
 
     def host_namespace

@@ -1,23 +1,14 @@
 require 'hashie'
-#require 'oj'
 require 'pathname'
 require 'yaml'
 
 module Servitude
   class Configuration < Hashie::Mash
 
-    def self.load( options={} )
-      merged_options = defaults.merge( file_options )
+    def self.load( config_filepath, options={} )
+      merged_options = defaults.merge( file_options( config_filepath ))
       merged_options = merged_options.merge( options )
       new( merged_options )
-    end
-
-    def self.config_filepath
-      Servitude::DEFAULT_CONFIG_PATH
-    end
-
-    def config_filepath
-      Pathname.new( self.class.config_filepath )
     end
 
     def slice( *keys )
@@ -39,15 +30,15 @@ module Servitude
       }
     end
 
-    def self.file_options
+    def self.file_options( config_filepath )
       return {} unless config_filepath
 
       File.exists?( config_filepath ) ?
-        load_file_options :
+        load_file_options( config_filepath ) :
         {}
     end
 
-    def self.load_file_options
+    def self.load_file_options( config_filepath )
       YAML::load( File.read( config_filepath ))
     end
 

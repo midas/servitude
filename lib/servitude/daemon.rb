@@ -5,18 +5,22 @@ require 'timeout'
 module Servitude
   class Daemon
 
-    attr_reader :name,
+    attr_reader :app_name,
+                :name,
                 :options,
                 :pid,
                 :pid_path,
                 :script,
+                :server_class,
                 :timeout
 
-    def initialize( options )
+    def initialize( app_name, server_class, options )
       @options  = options
-      @name     = options[:name] || Servitude::APP_NAME
+      @app_name = app_name
+      @name     = options[:name] || app_name
       @pid_path = options[:pid] || '.'
       @pid      = get_pid
+      @server_class = server_class
       @timeout  = options[:timeout] || 10
     end
 
@@ -37,7 +41,7 @@ module Servitude
     end
 
     def run
-      Servitude::server_class.new( options ).start
+      server_class.new( options ).start
     end
 
     def stop
@@ -46,7 +50,7 @@ module Servitude
           remove_pid
         when :failed_to_stop
         when :does_not_exist
-          puts "#{Servitude::APP_NAME} process is not running"
+          puts "#{app_name} process is not running"
           prompt_and_remove_pid_file if pid_file_exists? && !options[:quiet]
         else
           raise 'Unknown return code from #kill_process'
@@ -55,10 +59,10 @@ module Servitude
 
     def status
       if process_exists?
-        puts "#{Servitude::APP_NAME} process running with PID: #{pid}"
+        puts "#{app_name} process running with PID: #{pid}"
         true
       else
-        puts "#{Servitude::APP_NAME} process does not exist"
+        puts "#{app_name} process does not exist"
         prompt_and_remove_pid_file if pid_file_exists? && !options[:quiet]
         false
       end
@@ -117,7 +121,7 @@ module Servitude
     def kill_process
       return :does_not_exist unless process_exists?
 
-      $stdout.write "Attempting to stop #{Servitude::APP_NAME} process #{pid}..."
+      $stdout.write "Attempting to stop #{app_name} process #{pid}..."
       Process.kill INT, pid
 
       iteration_num = 0
@@ -128,10 +132,10 @@ module Servitude
       end
 
       if process_exists?
-        $stderr.puts "\nFailed to stop #{Servitude::APP_NAME} process #{pid}"
+        $stderr.puts "\nFailed to stop #{app_name} process #{pid}"
         return :failed_to_stop
       else
-        $stdout.puts "\nSuccessfuly stopped #{Servitude::APP_NAME} process #{pid}"
+        $stdout.puts "\nSuccessfuly stopped #{app_name} process #{pid}"
       end
 
       return :success

@@ -6,12 +6,12 @@ module Servitude
   protected
 
     def initialize_loggers
-      Servitude.initialize_loggers log_level: log_level
+      host_namespace.initialize_loggers log_level: log_level
     end
 
     def log_startup
       start_banner.each do |line|
-        Servitude.logger.info line
+        host_namespace.logger.info line
       end
     end
 
@@ -19,19 +19,19 @@ module Servitude
       [
         "",
         "***",
-        "* #{Servitude::APP_NAME} started",
+        "* #{host_namespace::APP_NAME} started",
         "*",
-        "* #{Servitude::ATTRIBUTION}",
+        "* #{host_namespace::ATTRIBUTION}",
         "*",
-        ((Servitude.configuration.nil? || Servitude.configuration.empty?) ? nil : "* Configuration"),
-        PrettyPrint::configuration_lines( Servitude.configuration, "*  ", all_config_filters ),
-        ((Servitude.configuration.nil? || Servitude.configuration.empty?) ? nil : "*"),
+        ((host_namespace.configuration.nil? || host_namespace.configuration.empty?) ? nil : "* Configuration"),
+        PrettyPrint::configuration_lines( host_namespace.configuration, "*  ", all_config_filters ),
+        ((host_namespace.configuration.nil? || host_namespace.configuration.empty?) ? nil : "*"),
         "***",
       ].flatten.reject( &:nil? )
     end
 
     def log_level
-      (Servitude.configuration.log_level.to_sym rescue :info)
+      (host_namespace.configuration.log_level.to_sym rescue :info)
     end
 
     def all_config_filters
@@ -51,8 +51,12 @@ module Servitude
       []
     end
 
+    def host_namespace
+      raise NotImplementedError
+    end
+
     #def config_value( key )
-      #value = Servitude.configuration.send( key )
+      #value = host_namespace.configuration.send( key )
 
       #return value unless value.is_a?( Hash )
 

@@ -11,10 +11,14 @@ module Servitude
 
       define_method level do |*messages|
         messages.each do |message|
-          Servitude.logger.send level, message
+          host_namespace.logger.send level, message
         end
       end
 
+    end
+
+    def host_namespace
+      raise NotImplementedError
     end
 
   end

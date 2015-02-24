@@ -11,7 +11,7 @@ module Servitude
       end
 
       def self.common_start_options
-        method_option :config, type: :string, aliases: '-c', desc: "The path for the config file", default: Servitude::DEFAULT_CONFIG_PATH
+        method_option :config, type: :string, aliases: '-c', desc: "The path for the config file"
         environment_option
         method_option :log_level, desc: "The log level", type: :string, aliases: '-o'
         method_option :log, desc: "The path for the log file", type: :string, aliases: '-l'
@@ -41,12 +41,14 @@ module Servitude
       no_commands do
 
         def start_interactive
-          server = Servitude::server_class.new( configuration( options, use_config: Servitude::USE_CONFIG, log: 'STDOUT' ))
+          server = host_namespace::server_class.new( configuration( options, use_config: host_namespace::USE_CONFIG, log: 'STDOUT' ))
           server.start
         end
 
         def start_daemon
-          server = Servitude::Daemon.new( configuration( options, use_config: Servitude::USE_CONFIG ))
+          server = Servitude::Daemon.new( host_namespace::APP_NAME,
+                                          host_namespace::server_class,
+                                          configuration( options, use_config: host_namespace::USE_CONFIG ))
           server.start
         end
 
@@ -55,8 +57,16 @@ module Servitude
         end
 
         def configuration( options, additional_options={} )
+          unless options[:config]
+            options = options.merge( config: host_namespace::DEFAULT_CONFIG_PATH )
+          end
+
           options = options.merge( additional_options )
-          Servitude.configuration = configuration_class.load( options )
+          host_namespace.configuration = configuration_class.load( host_namespace::DEFAULT_CONFIG_PATH, options )
+        end
+
+        def host_namespace
+          raise NotImplementedError
         end
 
       end
@@ -65,7 +75,9 @@ module Servitude
       pid_option
       method_option :quiet, type: :boolean, aliases: '-q', desc: "Do not prompt to remove an old PID file", default: false
       def status
-        result = Servitude::Daemon.new( configuration( options, use_config: Servitude::USE_CONFIG  )).status
+        result = Servitude::Daemon.new( host_namespace::APP_NAME,
+                                        host_namespace::server_class,
+                                        configuration( options, use_config: host_namespace::USE_CONFIG  )).status
         at_exit { exit result }
       end
 
@@ -73,7 +85,9 @@ module Servitude
       pid_option
       method_option :quiet, type: :boolean, aliases: '-q', desc: "Do not prompt to remove an old PID file", default: false
       def stop
-        server = Servitude::Daemon.new( configuration( options, use_config: Servitude::USE_CONFIG ))
+        server = Servitude::Daemon.new( host_namespace::APP_NAME,
+                                        host_namespace::server_class,
+                                        configuration( options, use_config: host_namespace::USE_CONFIG ))
         server.stop
       end
 

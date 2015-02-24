@@ -2,7 +2,11 @@ module Servitude
   module ConfigHelper
 
     def config
-      Servitude.configuration
+      host_namespace.configuration
+    end
+
+    def host_namespace
+      raise NotImplementedError
     end
 
   end

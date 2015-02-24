@@ -9,20 +9,22 @@ module Servitude
       base.extend( ClassMethods )
       base.class_eval do
         class << self
-          attr_accessor :logger
+          attr_accessor :boot_called,
+                        :configuration,
+                        :logger
         end
       end
     end
 
     module ClassMethods
 
-      def boot( app_id: ( self.name.split( '::' ).join( '-' ).downcase rescue nil ),
-                app_name: ( self.name.split( '::' ).join( ' ' ) rescue nil ),
+      def boot( app_id: ( host_namespace.name.split( '::' ).join( '-' ).downcase rescue nil ),
+                app_name: ( host_namespace.name.split( '::' ).join( ' ' ) rescue nil ),
                 author: nil,
-                attribution: ( "v#{self::VERSION} Copyright © #{Time.now.year} #{author || company}" rescue nil ),
+                attribution: ( "v#{host_namespace::VERSION} Copyright © #{Time.now.year} #{author}" rescue nil ),
                 use_config: false,
                 default_config_path: nil,
-                server_class: ( self::Server rescue "#{self.name}::Server" ))
+                server_class: ( host_namespace::Server rescue "#{host_namespace.name}::Server" ))
         unless app_id
           raise ArgumentError, 'app_id keyword is required'
         end
@@ -40,31 +42,47 @@ module Servitude
           raise ArgumentError, 'server_class keyword is required'
         end
 
-
         const_set :APP_ID, app_id
         const_set :APP_NAME, app_name
         const_set :AUTHOR, author
         const_set :ATTRIBUTION, attribution
         const_set :DEFAULT_CONFIG_PATH, default_config_path
+        const_set :SERVER_CLASS, server_class
         const_set :USE_CONFIG, use_config
 
-        Servitude.const_set :APP_ID, app_id
-        Servitude.const_set :APP_NAME, app_name
-        Servitude.const_set :AUTHOR, author
-        Servitude.const_set :ATTRIBUTION, attribution
-        Servitude.const_set :DEFAULT_CONFIG_PATH, default_config_path
-        Servitude.const_set :SERVER_CLASS, server_class
-        Servitude.const_set :USE_CONFIG, use_config
-
-        Servitude::boot_called = true
+        host_namespace.boot_called = true
       end
 
-      def configuration
-        @configuration
+      # Override to contradict convention of Server being nested
+      # in ::host_namespace
+      #
+      def host_namespace
+        self
       end
 
-      def configuration=( configuration )
-        @configuration = configuration
+      def server_class
+        case self::SERVER_CLASS
+          when String, Symbol
+            eval self::SERVER_CLASS.to_s, binding, __FILE__, __LINE__
+          else
+            self::SERVER_CLASS
+        end
+      end
+
+      def initialize_loggers( log_level: nil, filename: nil )
+        raise ArgumentError, 'log_level keyword is required' unless log_level
+
+        logger.adapter.close if logger && logger.adapter
+
+        self.logger = Yell.new do |l|
+          l.level = log_level
+          if filename
+            l.adapter :file, filename, :level => [:debug, :info, :warn]
+          else
+            l.adapter $stdout, :level => [:debug, :info, :warn]
+            l.adapter $stderr, :level => [:error, :fatal]
+          end
+        end
       end
 
       def configure

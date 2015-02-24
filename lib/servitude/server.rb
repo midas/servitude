@@ -22,7 +22,7 @@ module Servitude
     end
 
     def initialize( cli_options={} )
-      unless Servitude.boot_called
+      unless host_namespace.boot_called
         raise 'You must call boot before starting server'
       end
 
@@ -48,6 +48,10 @@ module Servitude
   protected
 
     def run
+      raise NotImplementedError
+    end
+
+    def host_namespace
       raise NotImplementedError
     end
 

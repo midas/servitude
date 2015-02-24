@@ -23,9 +23,9 @@ module Servitude
         "*",
         "* #{Servitude::ATTRIBUTION}",
         "*",
-        (Servitude.configuration.empty? ? nil : "* Configuration"),
+        ((Servitude.configuration.nil? || Servitude.configuration.empty?) ? nil : "* Configuration"),
         PrettyPrint::configuration_lines( Servitude.configuration, "*  ", all_config_filters ),
-        (Servitude.configuration.empty? ? nil : "*"),
+        ((Servitude.configuration.nil? || Servitude.configuration.empty?) ? nil : "*"),
         "***",
       ].flatten.reject( &:nil? )
     end

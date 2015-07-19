@@ -1,3 +1,5 @@
+require 'servitude'
+
 module Servitude
   module Logging
 

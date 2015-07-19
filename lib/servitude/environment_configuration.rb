@@ -1,6 +1,4 @@
-require 'delegate'
-require 'hashie'
-require 'oj'
+require 'servitude'
 
 module Servitude
   class EnvironmentConfiguration < Servitude::Configuration

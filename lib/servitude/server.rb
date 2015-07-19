@@ -1,5 +1,5 @@
-require 'servitude'
 require 'hooks'
+require 'servitude'
 
 module Servitude
   module Server

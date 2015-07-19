@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
 
+  spec.add_dependency "autoloaded", ">= 2.1", "< 3"
   spec.add_dependency "celluloid", "~> 0"
   spec.add_dependency "hashie"
   spec.add_dependency "hooks", "~> 0"

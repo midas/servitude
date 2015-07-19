@@ -1,4 +1,5 @@
 require 'celluloid'
+require 'servitude'
 
 module Servitude
   module ServerThreaded
